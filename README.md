@@ -4,7 +4,7 @@
 ## Contents
 - [Introduction](#introduction)
 - [Setup](#setup)
-- [Planned Improvement](#planned-improvements)
+- [Planned Improvements](#planned-improvements)
 - [License](#license)
 
 ## Introduction
