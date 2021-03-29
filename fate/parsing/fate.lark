@@ -1,0 +1,45 @@
+//=========
+//| Rules |
+//=========
+
+// Grammar for skill and characteristic tests
+
+test_start: test
+          | MACRO
+
+test: [PROFILE] (command | term) signed_term* [ATTACK] ["*" NUMBER]
+
+command: COMMAND ["on"i COMMAND]
+
+term: [PM] NUMBER -> term
+signed_term: PM NUMBER -> term
+
+// Grammar for dice equations
+
+dice_start: dice_term signed_dice_term*
+
+dice_term: [PM] (NUMBER | dice | bonus) -> dice_term
+signed_dice_term: PM (NUMBER | dice | bonus) -> dice_term
+
+bonus: STAT_BONUS
+
+dice: [NUMBER] "d"i NUMBER [TEARING]
+
+//=============
+//| Terminals |
+//=============
+
+%import common.INT -> NUMBER
+%import common.WS
+%ignore WS
+
+PM: /[+-]/
+ATTACK: ("!!!" | "!!" | "!")
+TEARING: "T"i
+PROFILE: /#[a-z0-9]+/i
+MACRO: /=[a-z0-9]+/i
+STAT_BONUS: /[A-Z]+B/i
+
+// Case-insensitive sequence of whitespace-separated words
+// Any word after the first must not be the word "on"
+COMMAND: /[a-z](([a-z]|\s(?!on\s))*[a-z])?/i
