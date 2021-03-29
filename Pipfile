@@ -8,6 +8,7 @@ discord = "*"
 lark-parser = "*"
 sqlalchemy = "*"
 click = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.9"
@@ -15,5 +16,4 @@ python_version = "3.9"
 [dev-packages]
 pylint = "*"
 pytest = "*"
-pyyaml = "*"
 pylint-pytest = "*"
