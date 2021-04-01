@@ -74,7 +74,11 @@ class Processor(Transformer):
     def dice_start(self, args):
         """Entry point for reading dice equation parse tree."""
 
-        request = DiceEquation(args)
+        *terms, repeats = args
+
+        repeats = 1 if repeats is None else int(repeats)
+
+        request = DiceEquation(terms, repeats)
 
         # TODO Need a more transparent solution
         if request.dice_count > 200:

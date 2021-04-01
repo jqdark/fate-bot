@@ -16,7 +16,7 @@ signed_term: PM NUMBER -> term
 
 // Grammar for dice equations
 
-dice_start: dice_term signed_dice_term*
+dice_start: dice_term signed_dice_term* ["*" NUMBER]
 
 dice_term: [PM] (NUMBER | dice | bonus) -> dice_term
 signed_dice_term: PM (NUMBER | dice | bonus) -> dice_term

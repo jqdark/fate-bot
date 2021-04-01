@@ -6,19 +6,10 @@ from ..enums import Attack, Key
 from .locations import locations
 
 
-def d(N, tearing=False):
-    """Return roll of a fair N-sided die.
-    
-    Args:
-        N: Number of faces on die.
-        tearing: If tearing, we roll twice and take the highest.
-    """
+def d(N):
+    """Return roll of a fair N-sided die."""
 
-    roll = randint(1, N)
-    if tearing:
-        roll = max(roll, randint(1, N))
-
-    return roll
+    return randint(1, N)
 
 
 def test(target):
@@ -246,11 +237,14 @@ class DiceTerm:
         total = 0
         descriptions = list()
         crit = False
+
+        rolls = [d(self.sides) for _ in range(self.number)]
+
+        if self.tearing:
+            rolls.append(d(self.sides))
+            rolls.remove(min(rolls))
         
-        for _ in range(self.number):
-
-            roll = d(self.sides, self.tearing)
-
+        for roll in rolls:
             total += roll
 
             # Check for critical rolls
@@ -267,7 +261,6 @@ class DiceTerm:
                 descriptions.append(str(roll))
 
         description = ", ".join(descriptions)
-
         total *= self.sign
 
         return total, self.sign,  f"[{description}] ({self.number}d{self.sides}{'T' if self.tearing else ''})", crit
@@ -295,12 +288,13 @@ class BonusTerm:
 class DiceEquation:
     """Class for representing dice equations."""
 
-    def __init__(self, terms):
+    def __init__(self, terms, repeats=1):
         """Create a dice equation."""
 
         self.flat = 0
         self.terms = list()
         self.dice_count = 0
+        self.repeats = repeats
         self.is_complex = False
         self.profile_name = None
 
@@ -315,9 +309,8 @@ class DiceEquation:
                 self.is_complex = True
 
 
-
-    def __call__(self, profile=None):
-        """Perform and format roll."""
+    def roll_once(self, profile=None):
+        """Perform a single repetition of this roll request."""
 
         if (
             self.is_complex
@@ -346,8 +339,21 @@ class DiceEquation:
         if self.flat != 0:
             description += f" {'+' if self.flat > 0 else '-'} {abs(self.flat)}"
 
+        return critical, description, total
+
+
+    def __call__(self, profile=None):
+        """Perform and format roll."""
+
+        rolls = [self.roll_once(profile) for _ in range(self.repeats)]
+
+        description = "\n".join(
+            f"Rolls: `{description}` | Total: `{total}`" for _, description, total in rolls
+        )
+        critical = any(crit for crit, _, _ in rolls)
+
         response = {
-            "description": f"Rolls: `{description}` | Total: `{total}`",
+            "description": description,
             "color": Color.gold() if critical else Color.light_gray(),
             "footer": "Critical Damage" if critical else None
         }
