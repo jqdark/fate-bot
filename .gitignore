@@ -117,3 +117,4 @@ dmypy.json
 THOUGHTS.md
 db.yaml
 fate.db
+Pipfile.lock
