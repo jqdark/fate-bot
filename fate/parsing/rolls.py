@@ -239,10 +239,12 @@ class DiceTerm:
         crit = False
 
         rolls = [d(self.sides) for _ in range(self.number)]
+        dropped = None
 
         if self.tearing:
             rolls.append(d(self.sides))
-            rolls.remove(min(rolls))
+            dropped = min(rolls)
+            rolls.remove(dropped)
         
         for roll in rolls:
             total += roll
@@ -262,6 +264,9 @@ class DiceTerm:
 
         description = ", ".join(descriptions)
         total *= self.sign
+
+        if dropped is not None:
+            description += f" / drop {dropped}"
 
         return total, self.sign,  f"[{description}] ({self.number}d{self.sides}{'T' if self.tearing else ''})", crit
 
