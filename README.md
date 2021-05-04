@@ -15,12 +15,17 @@ Written in Python using: [discord.py](https://github.com/Rapptz/discord.py), [SQ
 
 Key features:
 
+- Optional "fast mode" allows the `--roll` command prefix to be omitted (set on a per-channel basis).
 - Simple command interface for performing DH2 skill/characteristic tests.
-- Roll arbitrary combinations of dice.
+![Screenshot of a DH skill test](/examples/basic_tests.png?raw=true)
 - Persistent storage of character profiles.
+![Screenshot of DH skill tests](/examples/skill_tests.png?raw=true)
+- Roll arbitrary combinations of dice.
+![Screenshot of generic dice rolls](/examples/generic.png?raw=true)
 - Save command macros for later reuse.
+![Screenshot of a macro](/examples/macro.png?raw=true)
 - Autocorrection of misspelled skill and characteristic names.
-- Optional "fast mode" allows the roll command prefix to be omitted (set on a per-channel basis).
+![Screenshot of spell correction](/examples/autocorrect.png?raw=true)
 
 ## Setup
 
